@@ -1,0 +1,194 @@
+.sidenav-container {
+  height: 100vh;
+  width: 100%;
+}
+
+.sidenav {
+  width: 64px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  overflow: hidden;
+  
+  &.expanded {
+    width: 240px;
+  }
+  
+  &.collapsed {
+    width: 64px;
+  }
+}
+
+// Ensure Material's sidenav container adjusts content margin automatically
+::ng-deep .sidenav-container {
+  .mat-drawer-side {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  // Ensure content area adjusts with smooth transition based on sidenav width
+  .mat-drawer-content {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  // Override Material's width calculation to use our CSS classes
+  .sidenav.expanded.mat-drawer {
+    width: 240px !important;
+    min-width: 240px !important;
+    max-width: 240px !important;
+  }
+  
+  .sidenav.collapsed.mat-drawer {
+    width: 64px !important;
+    min-width: 64px !important;
+    max-width: 64px !important;
+  }
+  
+  // Ensure content margin adjusts based on sidenav width
+  .sidenav.expanded ~ .mat-drawer-content {
+    margin-left: 240px !important;
+  }
+  
+  .sidenav.collapsed ~ .mat-drawer-content {
+    margin-left: 64px !important;
+  }
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  min-height: 64px;
+  transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), justify-content 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  .toggle-button {
+    margin-right: 8px;
+    transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+  }
+  
+  .app-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: auto;
+  }
+}
+
+mat-nav-list {
+  padding: 8px 0;
+  
+  a[mat-list-item] {
+    margin: 4px 8px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, justify-content 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    
+    &:hover {
+      background-color: rgba(0, 49, 108, 0.08);
+    }
+    
+    &.active {
+      background-color: rgba(0, 49, 108, 0.12);
+      color: #00316c;
+      font-weight: 500;
+      
+      mat-icon {
+        color: #00316c;
+      }
+    }
+    
+    mat-icon {
+      margin-right: 16px;
+      color: rgba(0, 0, 0, 0.6);
+      flex-shrink: 0;
+      display: inline-flex;
+      transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      opacity: 1;
+      transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: auto;
+    }
+  }
+}
+
+.sidenav-content {
+  padding: 0;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+// Collapsed state adjustments
+.sidenav.collapsed {
+  .sidenav-header {
+    justify-content: center;
+    padding: 16px 8px;
+    
+    .toggle-button {
+      margin-right: 0;
+    }
+    
+    .app-title {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
+  }
+  
+  mat-nav-list {
+    a[mat-list-item] {
+      justify-content: center;
+      margin: 4px 8px;
+      
+      ::ng-deep {
+        .mdc-list-item__content {
+          justify-content: center !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), justify-content 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+      }
+      
+      mat-icon {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        display: inline-flex !important;
+      }
+      
+      span {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+// Expanded state - ensure smooth transitions
+.sidenav.expanded {
+  .sidenav-header {
+    .app-title {
+      opacity: 1;
+      width: auto;
+    }
+  }
+  
+  mat-nav-list {
+    a[mat-list-item] {
+      span {
+        opacity: 1;
+        width: auto;
+      }
+    }
+  }
+}

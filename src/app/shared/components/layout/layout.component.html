@@ -1,0 +1,33 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened="true"
+    class="sidenav"
+    [class.expanded]="isExpanded"
+    [class.collapsed]="!isExpanded">
+    <div class="sidenav-header">
+      <button mat-icon-button (click)="toggleSidenav()" class="toggle-button" aria-label="Toggle navigation">
+        <mat-icon>{{ isExpanded ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+      @if (isExpanded) {
+        <span class="app-title">Navigation</span>
+      }
+    </div>
+    
+    <mat-nav-list>
+      @for (item of navItems; track item.route) {
+        <a mat-list-item [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          @if (isExpanded) {
+            <span matListItemTitle>{{ item.label }}</span>
+          }
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>
