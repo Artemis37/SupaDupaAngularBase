@@ -1,28 +1,27 @@
-import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
-import { Roles } from '../models/roles';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private authService: AuthService) {}
+  private readonly PERSON_SYNC_ID_KEY = 'person_sync_id';
+  private readonly platformId = inject(PLATFORM_ID);
 
-  async hasRole(role: Roles): Promise<boolean> {
-    const roles = await this.authService.getUserRoles();
-    return roles.includes(role);
+  getPersonSyncId(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem(this.PERSON_SYNC_ID_KEY);
+    }
+    return null;
   }
 
-  async hasAnyRole(roles: Roles[]): Promise<boolean> {
-    const userRoles = await this.authService.getUserRoles();
-    return roles.some(role => userRoles.includes(role));
-  }
-
-  async getUserName(): Promise<string | null> {
-    return this.authService.getUserName();
-  }
-
-  async getUserId(): Promise<string | null> {
-    return this.authService.getUserId();
+  setPersonSyncId(id: string | null): void {
+    if (isPlatformBrowser(this.platformId)) {
+      if (id) {
+        localStorage.setItem(this.PERSON_SYNC_ID_KEY, id);
+      } else {
+        localStorage.removeItem(this.PERSON_SYNC_ID_KEY);
+      }
+    }
   }
 }

@@ -1,25 +1,17 @@
 import { inject } from '@angular/core';
-import { Router, CanActivateFn, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, CanActivateFn } from '@angular/router';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../services/auth.service';
-import { UserService } from '../services/user.service';
-import { Roles } from '../models/roles';
 
-export const authorizationGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
+export const authorizationGuard: CanActivateFn = () => {
   const router = inject(Router);
   const authService = inject(AuthService);
-  const userService = inject(UserService);
+  const platformId = inject(PLATFORM_ID);
 
-  const isAuthenticated = await authService.isAuthenticated();
-  if (!isAuthenticated) {
-    router.navigate(['/login']);
-    return false;
-  }
-
-  const requiredRoles = route.data['roles'] as Roles[];
-  if (requiredRoles && requiredRoles.length > 0) {
-    const hasRole = await userService.hasAnyRole(requiredRoles);
-    if (!hasRole) {
-      router.navigate(['/unauthorized']);
+  if (isPlatformBrowser(platformId)) {
+    if (!authService.isAuthenticated()) {
+      router.navigate(['/login']);
       return false;
     }
   }

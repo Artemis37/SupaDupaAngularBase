@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 import { appReducer } from './store/app.reducer';
-import { authHeaderInterceptor, requestHeaderInterceptor } from './shared/interceptors';
+import { authHeaderInterceptor, requestHeaderInterceptor, personSyncIdInterceptor } from './shared/interceptors';
 import { GlobalErrorHandlingService } from './shared/services/global-error-handling.service';
 import { DynamicLocaleId, provideDynamicLocale } from './shared/services/dynamic.locale';
 import { CustomDateAdapter } from './shared/utils/custom-date-adapter';
@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(
-      withInterceptors([requestHeaderInterceptor, authHeaderInterceptor])
+      withInterceptors([requestHeaderInterceptor, personSyncIdInterceptor, authHeaderInterceptor])
     ),
     provideAnimations(),
     provideStore({ app: appReducer }),
