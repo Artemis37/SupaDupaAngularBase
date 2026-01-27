@@ -1,21 +1,11 @@
 import { TranslateService } from '@ngx-translate/core';
-import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '../models/supported-languages';
-import { DynamicLocaleId } from './dynamic.locale';
+import { DEFAULT_LANGUAGE } from '../models/supported-languages';
 
 export function initializeTranslation(
-  translateService: TranslateService,
-  dynamicLocale: DynamicLocaleId
+  translateService: TranslateService
 ): () => Promise<void> {
   return () => {
-    const defaultLang = DEFAULT_LANGUAGE;
-    const supportedLang = SUPPORTED_LANGUAGES.find(lang => lang.code === defaultLang);
-    
-    if (supportedLang) {
-      dynamicLocale.setLocale(supportedLang.locale);
-    }
-    
-    translateService.setDefaultLang(defaultLang);
-    
+    translateService.setDefaultLang(DEFAULT_LANGUAGE);
     return Promise.resolve();
   };
 }

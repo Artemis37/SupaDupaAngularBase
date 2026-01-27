@@ -1,0 +1,9 @@
+<div class="custom-snackbar" [ngClass]="'snackbar-' + data.type">
+  <div class="snackbar-content">
+    <mat-icon class="snackbar-icon">{{ getIcon() }}</mat-icon>
+    <span class="snackbar-message">{{ data.text }}</span>
+  </div>
+  <button mat-icon-button (click)="dismiss()" class="snackbar-close" aria-label="Close">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

@@ -1,0 +1,104 @@
+// Override Material's snackbar container background
+::ng-deep .custom-snackbar-container {
+  .mat-mdc-snack-bar-container,
+  .mat-mdc-snackbar-surface {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+}
+
+.custom-snackbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 320px;
+  max-width: 600px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s ease;
+}
+
+.snackbar-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 14px;
+  min-width: 0;
+}
+
+.snackbar-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.snackbar-message {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.snackbar-close {
+  margin-left: 12px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// Success variant
+.snackbar-success {
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #45a049;
+}
+
+// Error variant
+.snackbar-error {
+  background-color: #d74132;
+  color: white;
+  border: 1px solid #e53935;
+}
+
+// Warning variant
+.snackbar-warning {
+  background-color: #ff9800;
+  color: white;
+  border: 1px solid #fb8c00;
+}
+
+// Info variant
+.snackbar-info {
+  background-color: #2196f3;
+  color: white;
+  border: 1px solid #1e88e5;
+}
+
+// Animation for entry - simple fade in
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

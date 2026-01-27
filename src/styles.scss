@@ -100,3 +100,65 @@ body {
 .mat-mdc-form-field {
   width: 100%;
 }
+
+// Snackbar styles
+.success-snackbar {
+  --mdc-snackbar-container-color: #4caf50;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #f44336;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+.warning-snackbar {
+  --mdc-snackbar-container-color: #ff9800;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+.info-snackbar {
+  --mdc-snackbar-container-color: #2196f3;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+// Custom snackbar container - remove Material's default background
+.custom-snackbar-container {
+  .mat-mdc-snack-bar-container {
+    padding: 0 !important;
+    min-width: auto !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  .mat-mdc-snackbar-surface {
+    background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+// Global override for Material snackbar background (more specific selectors)
+.mat-mdc-snack-bar-container.custom-snackbar-container {
+  background-color: transparent !important;
+  background: transparent !important;
+  
+  .mat-mdc-snackbar-surface {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+}
+
+// Additional override using ::ng-deep for Material's internal styles
+::ng-deep .custom-snackbar-container {
+  .mat-mdc-snack-bar-container,
+  .mat-mdc-snackbar-surface {
+    background-color: transparent !important;
+    background: transparent !important;
+  }
+}

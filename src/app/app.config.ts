@@ -7,15 +7,12 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 import { appReducer } from './store/app.reducer';
 import { authHeaderInterceptor, requestHeaderInterceptor, personSyncIdInterceptor } from './shared/interceptors';
 import { GlobalErrorHandlingService } from './shared/services/global-error-handling.service';
-import { DynamicLocaleId, provideDynamicLocale } from './shared/services/dynamic.locale';
-import { CustomDateAdapter } from './shared/utils/custom-date-adapter';
 import { initializeTranslation } from './shared/services/translation-initializer';
 
 // HttpLoaderFactory for ngx-translate
@@ -51,23 +48,12 @@ export const appConfig: ApplicationConfig = {
     {
       provide: APP_INITIALIZER,
       useFactory: initializeTranslation,
-      deps: [TranslateService, DynamicLocaleId],
+      deps: [TranslateService],
       multi: true
     },
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandlingService
-    },
-    provideDynamicLocale(),
-    {
-      provide: MAT_DATE_LOCALE,
-      useFactory: (locale: DynamicLocaleId) => locale.getLocale(),
-      deps: [DynamicLocaleId]
-    },
-    {
-      provide: DateAdapter,
-      useClass: CustomDateAdapter,
-      deps: [DynamicLocaleId]
     }
   ]
 };
