@@ -1,0 +1,22 @@
+{
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "search": "Suchen",
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "warning": "Warnung",
+    "info": "Information",
+    "welcome": "Willkommen"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "unauthorized": "Nicht autorisiert",
+    "unauthorizedMessage": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen."
+  }
+}
