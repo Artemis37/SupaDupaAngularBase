@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 import { appReducer } from './store/app.reducer';
-import { authHeaderInterceptor, requestHeaderInterceptor, personSyncIdInterceptor } from './shared/interceptors';
+import { authHeaderInterceptor, requestHeaderInterceptor, personSyncIdInterceptor, unauthorizedInterceptor } from './shared/interceptors';
 import { GlobalErrorHandlingService } from './shared/services/global-error-handling.service';
 import { initializeTranslation } from './shared/services/translation-initializer';
 
@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(
-      withInterceptors([requestHeaderInterceptor, personSyncIdInterceptor, authHeaderInterceptor])
+      withInterceptors([requestHeaderInterceptor, personSyncIdInterceptor, authHeaderInterceptor, unauthorizedInterceptor])
     ),
     provideAnimations(),
     provideStore({ app: appReducer }),

@@ -71,8 +71,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (data) => {
         this.vehicles = data;
         this.dataSource.data = data;
-        // Connect sort after data is loaded and table is rendered
-        // Use a longer timeout to ensure the table is fully rendered
         setTimeout(() => {
           if (this.sort && !this.dataSource.sort) {
             this.dataSource.sort = this.sort;
