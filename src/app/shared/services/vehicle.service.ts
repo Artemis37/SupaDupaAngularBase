@@ -11,6 +11,11 @@ export interface GetVehiclesParams {
   pageSize?: number;
 }
 
+export interface CreateOrUpdateVehiclePayload {
+  type: number;
+  licensePlate: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +33,24 @@ export class VehicleService {
     }
     return from(
       axios.get<ApiResponse<PagedResult<Vehicle>>>('Vehicle', { params: queryParams }).then((r) => r.data)
+    );
+  }
+
+  createVehicle(payload: CreateOrUpdateVehiclePayload): Observable<ApiResponse<boolean>> {
+    return from(
+      axios.post<ApiResponse<boolean>>('Vehicle', payload).then((r) => r.data)
+    );
+  }
+
+  updateVehicle(id: number, payload: CreateOrUpdateVehiclePayload): Observable<ApiResponse<boolean>> {
+    return from(
+      axios.put<ApiResponse<boolean>>(`Vehicle/${id}`, payload).then((r) => r.data)
+    );
+  }
+
+  deleteVehicle(id: number): Observable<ApiResponse<boolean>> {
+    return from(
+      axios.delete<ApiResponse<boolean>>(`Vehicle/${id}`).then((r) => r.data)
     );
   }
 }

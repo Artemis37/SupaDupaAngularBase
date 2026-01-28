@@ -65,35 +65,25 @@
   }
 }
 
-// Success variant
 .snackbar-success {
-  background-color: #4caf50;
+  background-color: #004ec3;
   color: white;
-  border: 1px solid #45a049;
+  border: 1px solid #004ec3;
 }
 
-// Error variant
-.snackbar-error {
-  background-color: #d74132;
-  color: white;
-  border: 1px solid #e53935;
-}
-
-// Warning variant
+.snackbar-error,
 .snackbar-warning {
   background-color: #ff9800;
   color: white;
-  border: 1px solid #fb8c00;
+  border: 1px solid #ff9800;
 }
 
-// Info variant
 .snackbar-info {
   background-color: #2196f3;
   color: white;
-  border: 1px solid #1e88e5;
+  border: 1px solid #2196f3;
 }
 
-// Animation for entry - simple fade in
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -16,7 +16,11 @@ export class CustomSnackbarComponent {
   constructor(
     @Inject(MAT_SNACK_BAR_DATA) public data: Message,
     private snackBarRef: MatSnackBarRef<CustomSnackbarComponent>
-  ) {}
+  ) { }
+  
+  ngOnInit(): void {
+   console.log(this.data);
+  }
 
   getIcon(): string {
     switch (this.data.type) {

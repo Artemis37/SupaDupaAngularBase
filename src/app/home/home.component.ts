@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, PLATFORM_ID, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, PLATFORM_ID, inject, DestroyRef, NgZone } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,10 +13,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { VehicleService } from '../shared/services/vehicle.service';
 import { AuthService } from '../shared/services/auth.service';
 import { MessagingService } from '../shared/services/messaging.service';
 import { Vehicle } from '../shared/models/vehicle';
+import { ConfirmDialogComponent } from '../shared/components/confirm-dialog/confirm-dialog.component';
+import { VehicleFormDialogComponent } from '../shared/components/vehicle-form-dialog/vehicle-form-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +35,9 @@ import { Vehicle } from '../shared/models/vehicle';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatDialogModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -40,7 +46,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   vehicles: Vehicle[] = [];
   dataSource = new MatTableDataSource<Vehicle>([]);
-  displayedColumns: string[] = ['id', 'licensePlate', 'type', 'personId', 'createdAt'];
+  displayedColumns: string[] = ['id', 'licensePlate', 'type', 'personId', 'createdAt', 'actions'];
   loading = false;
   searchText = '';
   pageNumber = 1;
@@ -50,6 +56,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly search$ = new Subject<void>();
   private readonly destroyRef = inject(DestroyRef);
+  private readonly ngZone = inject(NgZone);
+  private readonly dialog = inject(MatDialog);
 
   constructor(
     private vehicleService: VehicleService,
@@ -152,5 +160,80 @@ export class HomeComponent implements OnInit, AfterViewInit {
       default:
         return 'Unknown';
     }
+  }
+
+  openCreateDialog(): void {
+    const ref = this.dialog.open(VehicleFormDialogComponent, {
+      width: '400px',
+      data: { vehicle: null }
+    });
+    ref.afterClosed().subscribe((payload) => {
+      if (payload) {
+        this.vehicleService.createVehicle(payload).subscribe({
+          next: (res) => {
+            this.ngZone.run(() => this.loadVehicles());
+            if (res?.success) {
+              this.messagingService.showSuccess(res.message ?? 'Vehicle created.');
+            } else {
+              this.messagingService.showError(res?.message ?? 'Create failed.');
+            }
+          },
+          error: (err) => {
+            this.messagingService.showError(err?.error?.message ?? 'Failed to create vehicle.');
+          }
+        });
+      }
+    });
+  }
+
+  openEditDialog(vehicle: Vehicle): void {
+    const ref = this.dialog.open(VehicleFormDialogComponent, {
+      width: '400px',
+      data: { vehicle }
+    });
+    ref.afterClosed().subscribe((payload) => {
+      if (payload) {
+        this.vehicleService.updateVehicle(vehicle.id, payload).subscribe({
+          next: (res) => {
+            this.ngZone.run(() => this.loadVehicles());
+            if (res?.success) {
+              this.messagingService.showSuccess(res.message ?? 'Vehicle updated.');
+            } else {
+              this.messagingService.showError(res?.message ?? 'Update failed.');
+            }
+          },
+          error: (err) => {
+            this.messagingService.showError(err?.error?.message ?? 'Failed to update vehicle.');
+          }
+        });
+      }
+    });
+  }
+
+  openDeleteDialog(vehicle: Vehicle): void {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete vehicle',
+        message: `Are you sure you want to delete vehicle "${vehicle.licensePlate}" (ID: ${vehicle.id})?`
+      }
+    });
+    ref.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.vehicleService.deleteVehicle(vehicle.id).subscribe({
+          next: (res) => {
+            this.ngZone.run(() => this.loadVehicles());
+            if (res?.success) {
+              this.messagingService.showSuccess(res.message ?? 'Vehicle deleted.');
+            } else {
+              this.messagingService.showError(res?.message ?? 'Delete failed.');
+            }
+          },
+          error: (err) => {
+            this.messagingService.showError(err?.error?.message ?? 'Failed to delete vehicle.');
+          }
+        });
+      }
+    });
   }
 }

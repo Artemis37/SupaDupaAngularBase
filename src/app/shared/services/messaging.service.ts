@@ -14,7 +14,7 @@ export interface Message {
 })
 export class MessagingService implements OnDestroy {
   private messageSubject = new Subject<Message>();
-  private readonly defaultDuration = 5000;
+  private readonly defaultDuration = 500000;
   private messageSubscription: Subscription;
 
   constructor(private snackBar: MatSnackBar) {

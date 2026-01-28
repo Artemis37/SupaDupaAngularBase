@@ -162,3 +162,15 @@ body {
     background: transparent !important;
   }
 }
+
+.mat-primary {
+  .mat-icon {
+    color: #1757cb;
+  }
+}
+
+.mat-warn {
+  .mat-icon {
+    color: #b4271d;
+  }
+}
