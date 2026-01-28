@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, APP_INITIALIZER, ErrorHandler } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, APP_INITIALIZER, ErrorHandler, PLATFORM_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, HttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -14,6 +14,10 @@ import { appReducer } from './store/app.reducer';
 import { authHeaderInterceptor, requestHeaderInterceptor, personSyncIdInterceptor, unauthorizedInterceptor } from './shared/interceptors';
 import { GlobalErrorHandlingService } from './shared/services/global-error-handling.service';
 import { initializeTranslation } from './shared/services/translation-initializer';
+import { configureAxios } from './shared/config/axios-config';
+import { AuthService } from './shared/services/auth.service';
+import { UserService } from './shared/services/user.service';
+import { Router } from '@angular/router';
 
 // HttpLoaderFactory for ngx-translate
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -45,6 +49,15 @@ export const appConfig: ApplicationConfig = {
       },
       defaultLanguage: 'en'
     }).providers || [],
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (auth: AuthService, user: UserService, router: Router, platformId: object) => () => {
+        configureAxios(auth, user, router, platformId);
+        return Promise.resolve();
+      },
+      deps: [AuthService, UserService, Router, PLATFORM_ID],
+      multi: true
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeTranslation,

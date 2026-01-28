@@ -40,6 +40,24 @@ mat-card-content {
   padding: 24px;
 }
 
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+
+  .search-field {
+    flex: 1 1 280px;
+    min-width: 200px;
+  }
+}
+
+.vehicles-paginator {
+  margin-top: 16px;
+  border-radius: 8px;
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
