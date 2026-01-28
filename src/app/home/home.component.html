@@ -8,12 +8,8 @@
     <div class="search-row">
       <mat-form-field appearance="outline" class="search-field">
         <mat-label>Search vehicles</mat-label>
-        <input matInput [(ngModel)]="searchText" (keyup.enter)="onSearch()" placeholder="e.g. license plate or text" />
-        <button mat-icon-button matSuffix (click)="onSearch()" aria-label="Search">
-          <mat-icon>search</mat-icon>
-        </button>
+        <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchInput()" placeholder="e.g. license plate or text" />
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="onSearch()">Search</button>
     </div>
 
     @if (loading) {

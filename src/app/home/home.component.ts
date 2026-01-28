@@ -1,16 +1,18 @@
-import { Component, OnInit, AfterViewInit, ViewChild, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, PLATFORM_ID, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
 import { VehicleService } from '../shared/services/vehicle.service';
 import { AuthService } from '../shared/services/auth.service';
 import { MessagingService } from '../shared/services/messaging.service';
@@ -29,8 +31,7 @@ import { Vehicle } from '../shared/models/vehicle';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
-    MatInputModule,
-    MatIconModule
+    MatInputModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -47,6 +48,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   totalCount = 0;
   totalPages = 0;
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly search$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(
     private vehicleService: VehicleService,
@@ -56,9 +59,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.search$
+      .pipe(debounceTime(500), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.onSearch());
     if (isPlatformBrowser(this.platformId)) {
       this.loadVehicles();
     }
+  }
+
+  onSearchInput(): void {
+    this.search$.next();
   }
 
   ngAfterViewInit(): void {
